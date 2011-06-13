@@ -1,6 +1,6 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
-# Convert m4a audio file(s) to mp3 format.
+# A simple MPEG-4 to MPEG-3 (audio) conversion wrapper using faad and lame.
 # -----------------------------------------------------------------------------
 # Based on the m4a2mp3 shell script from
 # http://wiki.linuxquestions.org/wiki/.m4a_to_.mp3
