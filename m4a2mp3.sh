@@ -34,6 +34,8 @@ for INPUT_FILENAME in "$@"; do
 	faad -i "${INPUT_FILENAME}" 2> "${TMP_INFO}"
 	
 	cat "${TMP_INFO}" | sed -n '
+		s/[\"$]//g
+		s/[\`$]//g
 		s/^title: \(.*\)$/--tt "\1"/p
 		s/^artist: \(.*\)$/--ta "\1"/p
 		s/^album: \(.*\)$/--tl "\1"/p
