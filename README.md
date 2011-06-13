@@ -19,12 +19,13 @@ Dependencies
 
 Usage
 =====
-You can use the `m4a2mp3.sh` either with a single M4A file or a list of files:
+You can use the `m4a2mp3.sh` script either with a single M4A file or a list of files:
 
-`m4a2mp3.sh` [M4A file(s) ...]
+`m4a2mp3.sh [M4A file(s)…]`
 
 Examples:
-* `m4a2mp3.sh "Bohemian Rhapsody.m4a"`
+
+* `m4a2mp3.sh Bohemian_Rhapsody.m4a`
 * `m4a2mp3.sh *.m4a`
 
 Acknowledgements
