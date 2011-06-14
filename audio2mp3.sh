@@ -1,14 +1,19 @@
 #!/bin/sh
+#
 # -----------------------------------------------------------------------------
 # A simple MPEG-4 to MPEG-3 (audio) conversion wrapper using faad and lame.
 # -----------------------------------------------------------------------------
-# Based on the m4a2mp3 shell script from
-# http://wiki.linuxquestions.org/wiki/.m4a_to_.mp3
+#
+# Based on the m4a2mp3 and FLAC conversion shell scripts from
+# http://wiki.linuxquestions.org/wiki/.m4a_to_.mp3 and 
+# https://wiki.archlinux.org/index.php/Convert_Flac_to_Mp3
 #
 # Dependencies:
-#   * faad2: http://www.audiocoding.com/
 #   * lame:  http://lame.sourceforge.net/
+#   * faad2: http://www.audiocoding.com/ (optional)
+#   * flac:  http://flac.sourceforge.net/ (optional)
 #
+# -----------------------------------------------------------------------------
 # Copyright (C) 2011 by Jean Pierre Wenzel <jpwenzel@gmx.net>.
 # -----------------------------------------------------------------------------
 
