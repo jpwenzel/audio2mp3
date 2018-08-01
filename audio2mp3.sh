@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 #
 # -----------------------------------------------------------------------------
 # A simple MPEG-4 to MPEG-3 (audio) conversion wrapper using faad and lame.
@@ -11,11 +11,12 @@
 # Dependencies:
 #   * lame:          http://lame.sourceforge.net/
 #   * faad2:         http://www.audiocoding.com/
-#   * AtomicParsley: 
+#   * AtomicParsley: http://atomicparsley.sourceforge.net/
 #
 # -----------------------------------------------------------------------------
 # Copyright (C) 2011-2018 Jean Pierre Wenzel <jpwenzel@gmx.net>.
 # -----------------------------------------------------------------------------
+SANITZE_FILENAME=1
 
 for DEPENDENCY in lame faad AtomicParsley; do
 	hash "${DEPENDENCY}" 2>&- || {
@@ -25,12 +26,22 @@ for DEPENDENCY in lame faad AtomicParsley; do
 done
 
 INPUT_FILENAME="$1"
+
+# Currently, conversion from MPEG-4 audio to MP3 is supported only
+INPUT_FILE_TYPE=$(file --mime-type -b "$INPUT_FILENAME")
+if [[ "audio/x-m4a" != "$INPUT_FILE_TYPE" ]] ; then
+	echo "Sorry, only MPEG-4 audio is currently supported as input file."
+	echo "Input file is of type: $INPUT_FILE_TYPE"
+	exit 1;
+fi
+
 BASE_FILENAME="${INPUT_FILENAME%.*}"
+[[ "1" == "$SANITZE_FILENAME" ]] &&	BASE_FILENAME="${BASE_FILENAME//[^\ \(\)\[\]A-Za-z0-9._-]/_}"
+
 [ -z "${BASE_FILENAME}" ] && continue
 
 OUTPUT_FILENAME="${BASE_FILENAME}.mp3"
-TMP_DIR=$(mktemp -d "${TMPDIR:-/tmp}/audio2mp3.XXXXXXXXX")
-TMP_WAVE="$TMP_DIR"/wave
+TMP_WAVE_FILE=$(mktemp "${TMPDIR:-/tmp}/audio2mp3.XXXXXXXXX")
 
 # Gather audio file meta information
 PREV_LC_ALL=$LC_ALL
@@ -43,17 +54,17 @@ MP3_TAG_DATE=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©day' | sed -e 's/^
 export LC_ALL=$PREV_LC_ALL
 
 LAME_ARGS=(\
---tt "$MP3_TAG_TITLE" \
---ta "$MP3_TAG_ARTIST" \
---tl "$MP3_TAG_ALBUM" \
+--tt "$MP3_TAG_TITLE//&/\&" \
+--ta "$MP3_TAG_ARTIST//&/\&" \
+--tl "$MP3_TAG_ALBUM//&/\&" \
 --tn "$MP3_TAG_TRACK" \
 --ty "$MP3_TAG_DATE" \
 )
 
 # Convert from source to wave format
-faad "${INPUT_FILENAME}" -o "${TMP_WAVE}"
+faad "${INPUT_FILENAME}" -o "${TMP_WAVE_FILE}"
 
 # Compress using lame
-lame -v -V 2 -b 128 "${TMP_WAVE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"
+lame -v -V 2 -b 128 "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"
 
-rm "${TMP_WAVE}"
+rm "${TMP_WAVE_FILE}"
