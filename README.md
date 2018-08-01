@@ -1,12 +1,13 @@
 audio2mp3
 =========
-audio2mp3 is a wrapper tool using various applications such as `faad`, `flac`, and `lame` to convert audio files from different formats (WAV, FLAC, MPEG-4) to MPEG-3 audio.
+audio2mp3 is a wrapper tool using various applications such as `faad`, `AtomicParsley`, and `lame` to convert audio files from different formats to MPEG-3 audio.
+Currently, only the conversion from MPEG-4 audio to MPEG-3 audio is supported.
 
 Why?
 ====
-When I imported my audio CDs into iTunes, I decided to use the MPEG-4 audio format. Good choice as long as I was listening to music on my iPod, but unfortunately, my car stereo only plays MP3 files. Therefore, I had to find a way to simply convert the M4A files to MP3s before burning them on a CD…
+When I imported my audio CDs into iTunes, I decided to use the MPEG-4 audio format. Good choice as long as I was listening to music on my iPod, but unfortunately, my car stereo only plays MP3 files. Therefore, I had to find a way to simply convert the M4A files to MP3s before burning them on a CD...
 
-After a short while I thought — why not use the same mechanism to convert my FLAC files? So I renamed the project (it used to be called *m4a2mp3* before).
+After a short while I thought — why not use the same mechanism to convert my FLAC files? So I renamed the project (it used to be called *m4a2mp3* before). As you might guess, this is still on the to-do list...
 
 Installation
 ============
@@ -17,20 +18,18 @@ Dependencies
 `audio2mp3` is acting as a wrapper for these tools:
 
 * faad2: http://www.audiocoding.com/
-* flac: http://flac.sourceforge.net/
+* AtomicParsley: http://atomicparsley.sourceforge.net/
 * lame:  http://lame.sourceforge.net/
 
 Usage
 =====
-You can use the `audio2mp3.sh` script either with a single audio input file or a list of files:
+You can use the `audio2mp3.sh` script with a single audio input file as parameter:
 
-`audio2mp3.sh [audio file(s)…]`
+`audio2mp3.sh [audio file]`
 
 Examples:
 
 * `audio2mp3.sh Bohemian_Rhapsody.m4a`
-* `audio2mp3.sh *.m4a`
-* `audio2mp3.sh Aida_Marcha_Triunfal.wav Ride_of_the_Valkyries.flac`
 
 Acknowledgements
 ================
