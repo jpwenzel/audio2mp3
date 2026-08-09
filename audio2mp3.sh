@@ -38,8 +38,6 @@ fi
 BASE_FILENAME="${INPUT_FILENAME%.*}"
 [[ "1" == "$SANITZE_FILENAME" ]] &&	BASE_FILENAME="${BASE_FILENAME//[^\ \(\)\[\]A-Za-z0-9._-]/_}"
 
-[ -z "${BASE_FILENAME}" ] && continue
-
 OUTPUT_FILENAME="${BASE_FILENAME}.mp3"
 TMP_WAVE_FILE=$(mktemp "${TMPDIR:-/tmp}/audio2mp3.XXXXXXXXX")
 
