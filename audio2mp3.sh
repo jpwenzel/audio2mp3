@@ -63,6 +63,6 @@ LAME_ARGS=(\
 faad "${INPUT_FILENAME}" -o "${TMP_WAVE_FILE}"
 
 # Compress using lame
-lame -v -V 2 -b 128 "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"
+lame -v --vbr-new -V 1 "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"
 
 rm "${TMP_WAVE_FILE}"
