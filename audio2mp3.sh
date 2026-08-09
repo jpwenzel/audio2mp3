@@ -54,9 +54,9 @@ MP3_TAG_DATE=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©day' | sed -e 's/^
 export LC_ALL=$PREV_LC_ALL
 
 LAME_ARGS=(\
---tt "$MP3_TAG_TITLE//&/\&" \
---ta "$MP3_TAG_ARTIST//&/\&" \
---tl "$MP3_TAG_ALBUM//&/\&" \
+--tt "$MP3_TAG_TITLE" \
+--ta "$MP3_TAG_ARTIST" \
+--tl "$MP3_TAG_ALBUM" \
 --tn "$MP3_TAG_TRACK" \
 --ty "$MP3_TAG_DATE" \
 )
