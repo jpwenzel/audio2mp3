@@ -30,6 +30,8 @@ if [[ -z "$1" ]]; then
 	exit 1
 fi
 INPUT_FILENAME="$1"
+# Prevent leading-dash filenames from being parsed as options by file/faad/lame
+[[ "$INPUT_FILENAME" == -* ]] && INPUT_FILENAME="./${INPUT_FILENAME}"
 
 # Currently, only conversion from MPEG-4 audio to MP3 is supported
 INPUT_FILE_TYPE=$(file --mime-type -b "$INPUT_FILENAME")
