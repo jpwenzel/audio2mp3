@@ -86,10 +86,20 @@ if [[ "audio/x-m4a" != "$INPUT_FILE_TYPE" ]] ; then
 	exit 1;
 fi
 
-BASE_FILENAME="${INPUT_FILENAME%.*}"
+case "$INPUT_FILENAME" in
+	*/*)
+		INPUT_DIRNAME="${INPUT_FILENAME%/*}"
+		INPUT_BASENAME="${INPUT_FILENAME##*/}"
+		;;
+	*)
+		INPUT_DIRNAME="."
+		INPUT_BASENAME="$INPUT_FILENAME"
+		;;
+esac
+BASE_FILENAME="${INPUT_BASENAME%.*}"
 [[ "1" == "$SANITIZE_FILENAME" ]] &&	BASE_FILENAME="${BASE_FILENAME//[^\ \(\)\[\]A-Za-z0-9._\',!\&-]/_}"
 
-OUTPUT_FILENAME="${BASE_FILENAME}.mp3"
+OUTPUT_FILENAME="${INPUT_DIRNAME}/${BASE_FILENAME}.mp3"
 TMP_WAVE_FILE=$(mktemp "${TMPDIR:-/tmp}/audio2mp3.XXXXXXXXX")
 trap 'rm -f "${TMP_WAVE_FILE}"' EXIT
 
