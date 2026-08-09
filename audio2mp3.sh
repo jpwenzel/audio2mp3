@@ -25,11 +25,20 @@ for DEPENDENCY in lame faad AtomicParsley; do
 done
 
 FIX_FILENAME=0
+QUALITY="high"
 while [[ $# -gt 0 ]]; do
 	case "$1" in
 		--fix-filename)
 			FIX_FILENAME=1
 			shift
+			;;
+		--quality)
+			if [[ -z "$2" ]]; then
+				echo >&2 "--quality requires an argument (high, medium, podcast)"
+				exit 1
+			fi
+			QUALITY="$2"
+			shift 2
 			;;
 		--)
 			shift
@@ -45,8 +54,24 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
+case "$QUALITY" in
+	high)
+		LAME_QUALITY_ARGS=(--vbr-new -V 0)
+		;;
+	medium)
+		LAME_QUALITY_ARGS=(--vbr-new -V 5)
+		;;
+	podcast)
+		LAME_QUALITY_ARGS=(-a --vbr-new -V 7)
+		;;
+	*)
+		echo >&2 "Unknown quality preset: ${QUALITY} (expected: high, medium, podcast)"
+		exit 1
+		;;
+esac
+
 if [[ -z "$1" ]]; then
-	echo >&2 "Usage: $(basename "$0") [--fix-filename] <input file>"
+	echo >&2 "Usage: $(basename "$0") [--fix-filename] [--quality high|medium|podcast] <input file>"
 	exit 1
 fi
 INPUT_FILENAME="$1"
@@ -94,7 +119,7 @@ if ! faad "${INPUT_FILENAME}" -o "${TMP_WAVE_FILE}"; then
 fi
 
 # Compress using lame
-if ! lame -v --vbr-new -V 1 "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"; then
+if ! lame -v "${LAME_QUALITY_ARGS[@]}" "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"; then
 	echo >&2 "lame failed to encode ${OUTPUT_FILENAME}. Aborting."
 	exit 1
 fi
