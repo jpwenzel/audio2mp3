@@ -126,13 +126,13 @@ LAME_ARGS=(\
 )
 
 # Convert from source to wave format
-if ! faad "${INPUT_FILENAME}" -o "${TMP_WAVE_FILE}"; then
+if ! faad -q "${INPUT_FILENAME}" -o "${TMP_WAVE_FILE}"; then
 	echo >&2 "faad failed to decode ${INPUT_FILENAME}. Aborting."
 	exit 1
 fi
 
 # Compress using lame
-if ! lame -v "${LAME_QUALITY_ARGS[@]}" "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"; then
+if ! lame "${LAME_QUALITY_ARGS[@]}" "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"; then
 	echo >&2 "lame failed to encode ${OUTPUT_FILENAME}. Aborting."
 	exit 1
 fi
