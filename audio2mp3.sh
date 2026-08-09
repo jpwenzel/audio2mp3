@@ -51,11 +51,12 @@ trap 'rm -f "${TMP_WAVE_FILE}"' EXIT
 # Gather audio file meta information
 PREV_LC_ALL=$LC_ALL
 export LC_ALL=C
-MP3_TAG_TITLE=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©nam' | sed -e 's/^Atom "©nam" contains: //g')
-MP3_TAG_ARTIST=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©ART' | sed -e 's/^Atom "©ART" contains: //g')
-MP3_TAG_ALBUM=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©alb' | sed -e 's/^Atom "©alb" contains: //g')
-MP3_TAG_TRACK=$(AtomicParsley "${INPUT_FILENAME}" -t | grep 'trkn' | sed -e 's/^Atom "trkn" contains: //g' | grep -E -o '^\d*')
-MP3_TAG_DATE=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©day' | sed -e 's/^Atom "©day" contains: //g')
+ATOMIC_PARSLEY_TAGS=$(AtomicParsley "${INPUT_FILENAME}" -t)
+MP3_TAG_TITLE=$(grep '©nam' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "©nam" contains: //g')
+MP3_TAG_ARTIST=$(grep '©ART' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "©ART" contains: //g')
+MP3_TAG_ALBUM=$(grep '©alb' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "©alb" contains: //g')
+MP3_TAG_TRACK=$(grep 'trkn' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "trkn" contains: //g' | grep -E -o '^\d*')
+MP3_TAG_DATE=$(grep '©day' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "©day" contains: //g')
 export LC_ALL=$PREV_LC_ALL
 
 LAME_ARGS=(\
