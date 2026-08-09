@@ -25,6 +25,10 @@ for DEPENDENCY in lame faad AtomicParsley; do
 	}
 done
 
+if [[ -z "$1" ]]; then
+	echo >&2 "Usage: $(basename "$0") <input file>"
+	exit 1
+fi
 INPUT_FILENAME="$1"
 
 # Currently, only conversion from MPEG-4 audio to MP3 is supported
