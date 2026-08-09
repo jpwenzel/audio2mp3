@@ -72,6 +72,9 @@ trap 'rm -f "${TMP_WAVE_FILE}"' EXIT
 PREV_LC_ALL=$LC_ALL
 export LC_ALL=C
 ATOMIC_PARSLEY_TAGS=$(AtomicParsley "${INPUT_FILENAME}" -t)
+# Strip the UTF-8 BOM AtomicParsley prepends to its output, which otherwise
+# breaks the anchored "^Atom ..." match on the first tag line
+ATOMIC_PARSLEY_TAGS="${ATOMIC_PARSLEY_TAGS#$'\xef\xbb\xbf'}"
 MP3_TAG_TITLE=$(grep '©nam' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "©nam" contains: //g')
 MP3_TAG_ARTIST=$(grep '©ART' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "©ART" contains: //g')
 MP3_TAG_ALBUM=$(grep '©alb' <<< "$ATOMIC_PARSLEY_TAGS" | sed -e 's/^Atom "©alb" contains: //g')
