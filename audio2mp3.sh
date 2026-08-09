@@ -46,6 +46,7 @@ BASE_FILENAME="${INPUT_FILENAME%.*}"
 
 OUTPUT_FILENAME="${BASE_FILENAME}.mp3"
 TMP_WAVE_FILE=$(mktemp "${TMPDIR:-/tmp}/audio2mp3.XXXXXXXXX")
+trap 'rm -f "${TMP_WAVE_FILE}"' EXIT
 
 # Gather audio file meta information
 PREV_LC_ALL=$LC_ALL
@@ -68,15 +69,11 @@ LAME_ARGS=(\
 # Convert from source to wave format
 if ! faad "${INPUT_FILENAME}" -o "${TMP_WAVE_FILE}"; then
 	echo >&2 "faad failed to decode ${INPUT_FILENAME}. Aborting."
-	rm -f "${TMP_WAVE_FILE}"
 	exit 1
 fi
 
 # Compress using lame
 if ! lame -v --vbr-new -V 1 "${TMP_WAVE_FILE}" "${OUTPUT_FILENAME}" "${LAME_ARGS[@]}"; then
 	echo >&2 "lame failed to encode ${OUTPUT_FILENAME}. Aborting."
-	rm -f "${TMP_WAVE_FILE}"
 	exit 1
 fi
-
-rm "${TMP_WAVE_FILE}"
