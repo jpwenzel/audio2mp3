@@ -49,7 +49,7 @@ export LC_ALL=C
 MP3_TAG_TITLE=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©nam' | sed -e 's/^Atom "©nam" contains: //g')
 MP3_TAG_ARTIST=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©ART' | sed -e 's/^Atom "©ART" contains: //g')
 MP3_TAG_ALBUM=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©alb' | sed -e 's/^Atom "©alb" contains: //g')
-MP3_TAG_TRACK=$(AtomicParsley "${INPUT_FILENAME}" -t | grep 'trkn' | sed -e 's/^Atom "trkn" contains: //g' | egrep -o '^\d*')
+MP3_TAG_TRACK=$(AtomicParsley "${INPUT_FILENAME}" -t | grep 'trkn' | sed -e 's/^Atom "trkn" contains: //g' | grep -E -o '^\d*')
 MP3_TAG_DATE=$(AtomicParsley "${INPUT_FILENAME}" -t | grep '©day' | sed -e 's/^Atom "©day" contains: //g')
 export LC_ALL=$PREV_LC_ALL
 
