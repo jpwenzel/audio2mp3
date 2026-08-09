@@ -14,7 +14,7 @@
 #   * AtomicParsley: http://atomicparsley.sourceforge.net/
 #
 # -----------------------------------------------------------------------------
-# Copyright (C) 2011-2018 Jean Pierre Wenzel <jpwenzel@gmx.net>.
+# Copyright (C) 2011-2026 Jean Pierre Wenzel <jpwenzel@gmx.net>.
 # -----------------------------------------------------------------------------
 SANITZE_FILENAME=1
 
@@ -27,7 +27,7 @@ done
 
 INPUT_FILENAME="$1"
 
-# Currently, conversion from MPEG-4 audio to MP3 is supported only
+# Currently, only conversion from MPEG-4 audio to MP3 is supported
 INPUT_FILE_TYPE=$(file --mime-type -b "$INPUT_FILENAME")
 if [[ "audio/x-m4a" != "$INPUT_FILE_TYPE" ]] ; then
 	echo "Sorry, only MPEG-4 audio is currently supported as input file."
