@@ -24,12 +24,12 @@ for DEPENDENCY in lame faad AtomicParsley; do
 	}
 done
 
-FIX_FILENAME=0
+SANITIZE_FILENAME=1
 QUALITY="high"
 while [[ $# -gt 0 ]]; do
 	case "$1" in
-		--fix-filename)
-			FIX_FILENAME=1
+		--no-filename-sanitization)
+			SANITIZE_FILENAME=0
 			shift
 			;;
 		--quality)
@@ -71,7 +71,7 @@ case "$QUALITY" in
 esac
 
 if [[ -z "$1" ]]; then
-	echo >&2 "Usage: $(basename "$0") [--fix-filename] [--quality high|medium|podcast] <input file>"
+	echo >&2 "Usage: $(basename "$0") [--no-filename-sanitization] [--quality high|medium|podcast] <input file>"
 	exit 1
 fi
 INPUT_FILENAME="$1"
@@ -86,10 +86,20 @@ if [[ "audio/x-m4a" != "$INPUT_FILE_TYPE" ]] ; then
 	exit 1;
 fi
 
-BASE_FILENAME="${INPUT_FILENAME%.*}"
-[[ "1" == "$FIX_FILENAME" ]] &&	BASE_FILENAME="${BASE_FILENAME//[^\ \(\)\[\]A-Za-z0-9._\',!\&-]/_}"
+case "$INPUT_FILENAME" in
+	*/*)
+		INPUT_DIRNAME="${INPUT_FILENAME%/*}"
+		INPUT_BASENAME="${INPUT_FILENAME##*/}"
+		;;
+	*)
+		INPUT_DIRNAME="."
+		INPUT_BASENAME="$INPUT_FILENAME"
+		;;
+esac
+BASE_FILENAME="${INPUT_BASENAME%.*}"
+[[ "1" == "$SANITIZE_FILENAME" ]] &&	BASE_FILENAME="${BASE_FILENAME//[^\ \(\)\[\]A-Za-z0-9._\',!\&-]/_}"
 
-OUTPUT_FILENAME="${BASE_FILENAME}.mp3"
+OUTPUT_FILENAME="${INPUT_DIRNAME}/${BASE_FILENAME}.mp3"
 TMP_WAVE_FILE=$(mktemp "${TMPDIR:-/tmp}/audio2mp3.XXXXXXXXX")
 trap 'rm -f "${TMP_WAVE_FILE}"' EXIT
 
